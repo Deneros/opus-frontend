@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/deneros/opus-frontend:1.0
+          ports:
+            - containerPort: 5173
+          env:
+            - name: CHOKIDAR_USEPOLLING
+              value: "true"
+          volumeMounts:
+            - name: src-code
+              mountPath: /app/src
+            - name: public-assets
+              mountPath: /app/public
+      volumes:
+        - name: src-code
+          hostPath:
+            path: "/run/desktop/mnt/host/d/Trabajos/Portafolio Projects/chat/frontend/src"
+        - name: public-assets
+          hostPath:
+            path: "/run/desktop/mnt/host/d/Trabajos/Portafolio Projects/chat/frontend/public"
